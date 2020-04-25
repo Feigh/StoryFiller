@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+    <div class="row">
+        <div class="column">
+            <div id="ConnectSession">
+                <h2>Hej</h2>
+                <h4>Lista med svar</h4>
+                <ul id="sentMessages" class="SelectionList"></ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<style type="text/css">
+
+    .row {
+    float: left;
+    }
+    input{
+        margin-bottom: 5px;
+    }
+
+    .column {
+        width: 150px;
+        margin: 0 auto;
+    }
+    input{       
+        background-color:greenyellow;
+        border-style: none;
+        height: 30px;
+        border-radius: 10px;
+    }
+    span{       
+        background-color:greenyellow;
+        border-style: none;
+        height: 30px;
+        padding-left: 10px;
+        padding-right: 10px;
+        border-radius: 10px;
+    }
+    .inputtext{
+        width:150px;
+        text-align: center;
+    }
+    .submitbutton{
+        width:150px;
+        background-color:limegreen;
+        border-style: none;
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;   
+    }
+    .SelectionList{
+        margin: 0; 
+        padding: 0;
+        text-align: left;
+    }
+    ul {
+    list-style-type: none;
+        margin: 0; 
+        padding: 0;
+    }
+    li{
+        margin-bottom: 5px;
+    }
+
+    body{
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;        
+        background-color: lightgreen;
+    }
+</style>
+
+<script>
+    window.setInterval(function(){
+        GetMessages();
+    }, 1000);
+    function GetMessages(){
+        RequestMessages().then(result => 
+            {
+                var jsonrlt = JSON.parse(result)
+                console.log(jsonrlt);
+                var item = document.getElementById('sentMessages');
+                while( item.firstChild ){
+                    item.removeChild( item.firstChild );
+                }
+                item.appendChild(MakeMessageList(jsonrlt));
+            }
+        );
+    }
+
+    function RequestMessages(){
+        return $.ajax({
+            url: "http://localhost:4333/game",
+            type: "GET",
+            contentType: "text/plain"
+        });
+    }
+
+    function MakeMessageList(array)
+    {
+        var list = document.createElement('ul')
+        
+        for (var i = 0; i < array.length; i++) {
+            // Create the list item:
+            var item = document.createElement('li');
+            var button = document.createElement('span')
+            button.innerHTML =  array[i];
+            item.appendChild(button);
+            list.appendChild(item);
+        }
+        return list;
+    }
+</script>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+    <div class="row">
+        <div class="column">
+            <div id="ConnectSession">
+                <h2>Hej</h2>
+                <h4>Skriv nått</h4>
+                <input id="inputtext" class="inputtext" type="text"></input>
+                <input type="button" class="submitbutton" onclick="SendMessage()" value="Starta"></input>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<style type="text/css">
+
+    .row {
+    float: left;
+    }
+    input{
+        margin-bottom: 5px;
+    }
+
+    .column {
+        width: 150px;
+        margin: 0 auto;
+    }
+    input{       
+        background-color:greenyellow;
+        border-style: none;
+        height: 30px;
+        border-radius: 10px;
+    }
+    .inputtext{
+        width:150px;
+        text-align: center;
+    }
+    .submitbutton{
+        width:150px;
+        background-color:limegreen;
+        border-style: none;
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;   
+    }
+
+    body{
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;        
+        background-color: lightgreen;
+    }
+</style>
+
+<script>
+    function SendMessage(){
+        var text = document.getElementById('inputtext');
+        console.log(JSON.stringify(text.value));
+        SubmitText(text.value).then(result => 
+            {
+                var jsonrlt = JSON.parse(result)
+            }
+        );
+    }
+
+    function SubmitText(text){
+        return $.ajax({
+            url: "http://localhost:4333/game",
+            dataType: 'text',
+            type: "POST",
+            contentType: "text/plain",
+            data: JSON.stringify(text)
+        });
+    }
+</script>

@@ -20,7 +20,7 @@ namespace StoryFiller
 			int statuscode = 200;
 			try
 			{
-				responseString = JsonConvert.SerializeObject(_gameState.MessageList);
+				responseString = JsonConvert.SerializeObject(_gameState.PlayerList);
 			}
 			catch (Exception ex)
 			{
