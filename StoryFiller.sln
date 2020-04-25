@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30002.166
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoryFiller", "StoryFiller\StoryFiller.csproj", "{83A6B8E5-5BF2-4983-A5FE-E2C5AC504501}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoryFillerTest", "StoryFillerTest\StoryFillerTest.csproj", "{530D0320-112A-47D8-BB1D-AFA3A3D67D49}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{83A6B8E5-5BF2-4983-A5FE-E2C5AC504501}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83A6B8E5-5BF2-4983-A5FE-E2C5AC504501}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83A6B8E5-5BF2-4983-A5FE-E2C5AC504501}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83A6B8E5-5BF2-4983-A5FE-E2C5AC504501}.Release|Any CPU.Build.0 = Release|Any CPU
+		{530D0320-112A-47D8-BB1D-AFA3A3D67D49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{530D0320-112A-47D8-BB1D-AFA3A3D67D49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{530D0320-112A-47D8-BB1D-AFA3A3D67D49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{530D0320-112A-47D8-BB1D-AFA3A3D67D49}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {85215CCF-A75A-4CB7-9E89-7CE440F9B05A}
+	EndGlobalSection
+EndGlobal
