@@ -9,14 +9,22 @@
 <body>
     <div class="row">
         <div class="column">
-            <div id="ConnectSession">
+            <div id="LoginPlayer">
                 <h2>Hej</h2>
-                <h4>Skriv nått</h4>
+                <h4>Skriv ditt Namn</h4>
                 <input id="inputtext" class="inputtext" type="text"></input>
-                <input type="button" class="submitbutton" onclick="SendMessage()" value="Starta"></input>
+                <input type="button" class="submitbutton" onclick="SendUserName()" value="Skicka"></input>
+            </div>
+            <div id="WaitingArea">
+                <h2>Vänta på spelare</h2>
+                <input type="button" class="submitbutton" onclick="SendStartGame()" value="Starta Spel"></input>
+            </div>
+            <div id="GameStarted">
+                <h2>Spelet startat!</h2>
             </div>
         </div>
     </div>
+    <input id="sessionidhandler" onchange="" type="hidden" value="">
 </body>
 </html>
 
@@ -57,23 +65,104 @@
 </style>
 
 <script>
-    function SendMessage(){
-        var text = document.getElementById('inputtext');
-        console.log(JSON.stringify(text.value));
-        SubmitText(text.value).then(result => 
+/*
+    Ha en gömd imput. om den är tom så visa skriv namn rutan
+    om den har data visa vänta på spelar rutan
+    i vänta på spelare rutan så finns en knapp som säger starta spel 
+
+*/
+    window.onload = function () {
+            GetGameState().then(result => ToggleActiveDiv(JSON.parse(result)))
+        }
+
+    window.setInterval(function(){
+        GetGameState().then(result => ToggleActiveDiv(JSON.parse(result)))
+    }, 100);
+    function ToggleActiveDiv(state)
+    {
+        console.log(state);
+        if(state.status == 0) // waiting for player ska visa dialogen där du skriver in namn, om du har ett namn så visa vänta på spelare rutan
+        {
+            var namestate = document.getElementById('sessionidhandler').value;
+            console.log(namestate);
+            if(namestate === "" || typeof(namestate) === undefined)
             {
-                var jsonrlt = JSON.parse(result)
+                document.getElementById('GameStarted').style.display= "none";
+                document.getElementById('WaitingArea').style.display= "none";
+                document.getElementById('LoginPlayer').style.display= "block";                  
+            }
+            else
+            {
+                document.getElementById('GameStarted').style.display= "none";
+                document.getElementById('WaitingArea').style.display= "block";
+                document.getElementById('LoginPlayer').style.display= "none";  
+            }
+        }
+        if(state.status == 1) // playerinput visar rutan med spelet startat
+        {
+            document.getElementById('GameStarted').style.display= "block";
+            document.getElementById('WaitingArea').style.display= "none";
+            document.getElementById('LoginPlayer').style.display= "none";                             
+        }
+    }
+
+    function SendUserName(){
+        var player = {name: document.getElementById('inputtext').value}
+        var text = {player : player, action: "newplayer"}
+        SubmitUserName(text).then(result => 
+            {  
+                var jsResult = JSON.parse(result);    
+                document.getElementById('sessionidhandler').value = jsResult.id;
             }
         );
     }
 
-    function SubmitText(text){
+    function SendStartGame(){
+        var text = {action:"start"};
+        console.log(JSON.stringify(text));
+        SubmitStartGame(text).then(result => 
+            {  
+            }
+        );
+    }
+
+    function SubmitUserName(text){
         return $.ajax({
-            url: "http://localhost:4333/game",
+            url: "http://localhost:4333/player",
             dataType: 'text',
             type: "POST",
             contentType: "text/plain",
             data: JSON.stringify(text)
+        });
+    }
+
+    function GetGameState(){
+        return $.ajax({
+            url: "http://localhost:4333/player",
+            dataType: 'text',
+            type: "GET"
+        });
+    }
+
+    function SubmitStartGame(text){
+        return $.ajax({
+            url: "http://localhost:4333/player",
+            dataType: 'text',
+            type: "POST",
+            contentType: "text/plain",
+            data: JSON.stringify(text)
+        });
+    }
+
+    function CheckStatue(){
+
+    }
+
+    function GetPlayerStatus(){
+        return $.ajax({
+            url: "http://localhost:4333/player",
+            dataType: 'text',
+            type: "GET"
         });
     }
 </script>
