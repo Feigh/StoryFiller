@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StoryFiller.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.NetworkInformation;
@@ -6,33 +7,7 @@ using System.Text;
 
 namespace StoryFiller
 {
-	public class Player
-	{
-		public int id;
-		public string name;
-		public bool leader;
-	}
-	public enum GameSessionState
-	{
-		AWAITPLAYERS,
-		PLAYERINPUT,
-		LEADERINPUT
-	}
-	public class PlayerResponse
-	{
-		public GameSessionState status;
-		public Player player;
-	}
-	public class PlayerRequest 
-	{
-		public string action;
-		public Player player;
 
-		public PlayerRequest()
-		{
-			player = new Player();
-		}
-	}
 	public class GameState
 	{
 		public List<Player> PlayerList { get => _playerlist; }

@@ -12,7 +12,11 @@
             <div id="ConnectSession">
                 <h2>Hej</h2>
                 <h4>Lista med spelare</h4>
-                <ul id="playerMessage" class="SelectionList"></ul>
+                <ul id="playerList" class="SelectionList"></ul>
+            </div>
+            <div id="GameStarted">
+                <h2>Spelet startat!</h2>
+                <p id="gameprompt"></p>
             </div>
         </div>
     </div>
@@ -79,17 +83,34 @@
 <script>
     
     window.setInterval(function(){
-        GetMessages();
+        GetStatus()
     }, 1000);
-    function GetMessages(){
+
+    function ToggleActiveDiv(state)
+    {
+        if(state.status == 0) // waiting for player ska visa dialogen där du skriver in namn, om du har ett namn så visa vänta på spelare rutan
+        {
+            document.getElementById('ConnectSession').style.display= "block";
+            document.getElementById('GameStarted').style.display= "none";              
+        }
+        if(state.status == 1) // playerinput visar rutan med spelet startat
+        {
+            document.getElementById('ConnectSession').style.display= "none";
+            document.getElementById('GameStarted').style.display= "block";                          
+        }
+    }
+
+    function GetStatus(){
         RequestMessages().then(result => 
             {
                 var jsonrlt = JSON.parse(result)
-                var item = document.getElementById('playerMessage');
+                var item = document.getElementById('playerList');
                 while( item.firstChild ){
                     item.removeChild( item.firstChild );
                 }
-                item.appendChild(MakeMessageList(jsonrlt));
+                item.appendChild(MakePlayerList(jsonrlt.players));
+                ToggleActiveDiv(JSON.parse(result));
+                document.getElementById('gameprompt').innerHTML = jsonrlt.prompt;
             }
         );
     }
@@ -102,7 +123,7 @@
         });
     }
 
-    function MakeMessageList(array)
+    function MakePlayerList(array)
     {
         var list = document.createElement('ul')
         

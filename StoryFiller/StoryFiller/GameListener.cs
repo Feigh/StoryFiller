@@ -1,6 +1,9 @@
 ﻿using Newtonsoft.Json;
+using StoryFiller.Entities;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
 
@@ -20,7 +23,16 @@ namespace StoryFiller
 			int statuscode = 200;
 			try
 			{
-				responseString = JsonConvert.SerializeObject(_gameState.PlayerList);
+				var body = JsonConvert.DeserializeObject<GameRequest>(new StreamReader(context.Request.InputStream).ReadToEnd());
+				switch (context.Request.HttpMethod)
+				{
+					case "GET":
+						responseString = JsonConvert.SerializeObject(ProcessGet(body));
+						break;
+					case "POST":
+						responseString = JsonConvert.SerializeObject(ProcessPost(body));
+						break;
+				}
 			}
 			catch (Exception ex)
 			{
@@ -59,6 +71,18 @@ namespace StoryFiller
 				ProcessRequest(context);
 			}
 			listener.Close();
+		}
+		private GameResponse ProcessGet(GameRequest body)
+		{
+			string strprompt = "";
+			if (_gameState.CurrentState == GameSessionState.PLAYERINPUT)
+				strprompt = "En lång ___.";
+			var playList = _gameState.PlayerList;
+			return new GameResponse() { players = playList, status = _gameState.CurrentState, prompt = strprompt };
+		}
+		private GameResponse ProcessPost(GameRequest body)
+		{
+			return new GameResponse();
 		}
 	}
 }

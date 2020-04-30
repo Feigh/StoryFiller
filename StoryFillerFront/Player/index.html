@@ -17,10 +17,17 @@
             </div>
             <div id="WaitingArea">
                 <h2>Vänta på spelare</h2>
-                <input type="button" class="submitbutton" onclick="SendStartGame()" value="Starta Spel"></input>
+                <input type="button" id="startbutton" class="submitbutton" onclick="SendStartGame()" value="Starta Spel"></input>
             </div>
             <div id="GameStarted">
-                <h2>Spelet startat!</h2>
+                <h2>Skriv in ett svar som passar in</h2>
+                <input id="playerinput" class="inputtext" type="text"></input>
+                <input type="button" class="submitbutton" onclick="SendPlayerAnswere()" value="Skicka"></input>
+            </div>
+            <div id="LeaderSelect">
+                <h2>Välj</h2>
+                <input id="playerinput" class="inputtext" type="text"></input>
+                <input type="button" class="submitbutton" onclick="SendPlayerAnswere()" value="Skicka"></input>
             </div>
         </div>
     </div>
@@ -80,7 +87,13 @@
     }, 100);
     function ToggleActiveDiv(state)
     {
-        console.log(state);
+        if(state.leader)
+        {
+            document.getElementById('startbutton').style.display= "block";     
+        }
+        else{
+            document.getElementById('startbutton').style.display= "none";
+        }
         if(state.status == 0) // waiting for player ska visa dialogen där du skriver in namn, om du har ett namn så visa vänta på spelare rutan
         {
             var namestate = document.getElementById('sessionidhandler').value;
@@ -107,7 +120,7 @@
     }
 
     function SendUserName(){
-        var player = {name: document.getElementById('inputtext').value}
+        var player = {name: document.getElementById('playerinput').value}
         var text = {player : player, action: "newplayer"}
         SubmitUserName(text).then(result => 
             {  
@@ -119,6 +132,16 @@
 
     function SendStartGame(){
         var text = {action:"start"};
+        SubmitStartGame(text).then(result => 
+            {  
+            }
+        );
+    }
+
+    function SendPlayerAnswere(){
+        var sug = document.getElementById('inputtext').value;
+        var plr = {id: document.getElementById('sessionidhandler').value};
+        var text = {action:"suggestion",  suggestion : sug, player :plr};
         console.log(JSON.stringify(text));
         SubmitStartGame(text).then(result => 
             {  
