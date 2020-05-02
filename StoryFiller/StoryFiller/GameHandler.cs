@@ -32,7 +32,10 @@ namespace StoryFiller
 			while (gamerunning)
 			{
 				var nameList = _gameState.PlayerList.Select(x => x.name);
-				printMsg = $"Medelanden: { nameList.Aggregate(string.Empty, (a, b) => a == string.Empty ? b : a + ", " + b) }";
+				var sugestionlist = _gameState.PlayerList.Select(x => x.suggestion);
+
+				printMsg = $"Spelare: { nameList.Aggregate(string.Empty, (a, b) => a == string.Empty ? b : a + ", " + b) }";
+				printMsg += $"\nDeras Svar: { sugestionlist.Aggregate(string.Empty, (a, b) => a == string.Empty ? b : a + ", " + b) }";
 
 				Console.WriteLine(printMsg);
 

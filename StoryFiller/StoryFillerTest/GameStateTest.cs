@@ -2,6 +2,7 @@ using NUnit.Framework;
 using StoryFiller;
 using StoryFiller.Entities;
 using System.Linq;
+using System.Xml.XPath;
 
 namespace StoryFillerTest
 {
@@ -46,17 +47,21 @@ namespace StoryFillerTest
 			Assert.That(result.id, Is.EqualTo(1), "Wrong ID");
 		}
 		[Test]
-		public void StartGameWillChangeTheStateOfTheGame()
+		public void SaveInputToTheRightPlayer()
 		{
-			Assert.That(sup.CurrentState, Is.EqualTo(GameSessionState.AWAITPLAYERS), "Wrong State");
-			sup.StartGame("Bob");
-			Assert.That(sup.CurrentState, Is.EqualTo(GameSessionState.PLAYERINPUT), "The State did not change");
-		}
-		[Test]
-		public void TestMethod()
-		{
-			var answer = 42;
-			Assert.That(answer, Is.EqualTo(42), "Some useful error message");
+			var plr = sup.AddPlayer("Bob");
+			sup.AddPlayer("Jon");
+
+			var input = new Player() { id = plr.player.id, suggestion = "boop" };
+
+			sup.SubmitInput(input);
+
+			var result = sup.PlayerList.Find(x => x.name == "Bob");
+
+			Assert.That(result.suggestion, Is.EqualTo("boop"), "wrong suggestion");
+
+			result = sup.PlayerList.Find(x => x.name == "Jon");
+			Assert.That(result.suggestion, Is.EqualTo(null), "The State did not change");
 		}
 	}
 }

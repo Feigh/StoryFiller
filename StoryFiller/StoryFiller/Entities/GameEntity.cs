@@ -8,10 +8,14 @@ namespace StoryFiller.Entities
 	{
 	}
 
-	public class GamePrompt
+	public class PromptLine
 	{
-
+		public int id;
+		public int order;
+		public string prompt;
+		public string playerchoise;
 	}
+
 	public class Player
 	{
 		public int id;
@@ -24,7 +28,8 @@ namespace StoryFiller.Entities
 	{
 		AWAITPLAYERS,
 		PLAYERINPUT,
-		LEADERINPUT
+		LEADERINPUT,
+		WINNINGSCREEN
 	}
 	public class PlayerResponse
 	{

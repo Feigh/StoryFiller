@@ -26,8 +26,8 @@
             </div>
             <div id="LeaderSelect">
                 <h2>Välj</h2>
-                <input id="playerinput" class="inputtext" type="text"></input>
-                <input type="button" class="submitbutton" onclick="SendPlayerAnswere()" value="Skicka"></input>
+                <input id="leaderinput" class="inputtext" type="text"></input>
+                <input type="button" class="submitbutton" onclick="SendLeaderAnswere()" value="Skicka"></input>
             </div>
         </div>
     </div>
@@ -84,7 +84,7 @@
 
     window.setInterval(function(){
         GetGameState().then(result => ToggleActiveDiv(JSON.parse(result)))
-    }, 100);
+    }, 2000);
     function ToggleActiveDiv(state)
     {
         if(state.leader)
@@ -92,21 +92,23 @@
             document.getElementById('startbutton').style.display= "block";     
         }
         else{
-            document.getElementById('startbutton').style.display= "none";
+            document.getElementById('startbutton').style.display= "block";// sätt ill none när leader är implementerad
         }
         if(state.status == 0) // waiting for player ska visa dialogen där du skriver in namn, om du har ett namn så visa vänta på spelare rutan
         {
             var namestate = document.getElementById('sessionidhandler').value;
-            console.log(namestate);
-            if(namestate === "" || typeof(namestate) === undefined)
+            //console.log(namestate);
+            if(namestate === "" || namestate === undefined)
             {
                 document.getElementById('GameStarted').style.display= "none";
                 document.getElementById('WaitingArea').style.display= "none";
+                document.getElementById('LeaderSelect').style.display= "none";
                 document.getElementById('LoginPlayer').style.display= "block";                  
             }
             else
             {
                 document.getElementById('GameStarted').style.display= "none";
+                document.getElementById('LeaderSelect').style.display= "none";
                 document.getElementById('WaitingArea').style.display= "block";
                 document.getElementById('LoginPlayer').style.display= "none";  
             }
@@ -115,17 +117,18 @@
         {
             document.getElementById('GameStarted').style.display= "block";
             document.getElementById('WaitingArea').style.display= "none";
-            document.getElementById('LoginPlayer').style.display= "none";                             
+            document.getElementById('LoginPlayer').style.display= "none";     
+            document.getElementById('LeaderSelect').style.display= "none";                        
         }
     }
 
     function SendUserName(){
-        var player = {name: document.getElementById('playerinput').value}
+        var player = {name: document.getElementById('inputtext').value}
         var text = {player : player, action: "newplayer"}
         SubmitUserName(text).then(result => 
             {  
-                var jsResult = JSON.parse(result);    
-                document.getElementById('sessionidhandler').value = jsResult.id;
+                var jsResult = JSON.parse(result);   
+                document.getElementById('sessionidhandler').value = jsResult.player.id;
             }
         );
     }
@@ -139,11 +142,24 @@
     }
 
     function SendPlayerAnswere(){
-        var sug = document.getElementById('inputtext').value;
-        var plr = {id: document.getElementById('sessionidhandler').value};
-        var text = {action:"suggestion",  suggestion : sug, player :plr};
+        var sug = document.getElementById('playerinput').value;
+        console.log(sug);
+        var plr = {id: document.getElementById('sessionidhandler').value, suggestion : sug};
+        var text = {action:"suggestion", player :plr};
         console.log(JSON.stringify(text));
-        SubmitStartGame(text).then(result => 
+        SubminPlayerAnswere(text).then(result => 
+            {  
+            }
+        );
+    }
+
+    function SendLeaderAnswere(){
+        var sug = document.getElementById('leaderinput').value;
+        console.log(sug);
+        var plr = {id: document.getElementById('sessionidhandler').value, suggestion : sug};
+        var text = {action:"suggestion", player :plr};
+        console.log(JSON.stringify(text));
+        SubminPlayerAnswere(text).then(result => 
             {  
             }
         );
@@ -168,6 +184,16 @@
     }
 
     function SubmitStartGame(text){
+        return $.ajax({
+            url: "http://localhost:4333/player",
+            dataType: 'text',
+            type: "POST",
+            contentType: "text/plain",
+            data: JSON.stringify(text)
+        });
+    }
+
+    function SubminPlayerAnswere(text){
         return $.ajax({
             url: "http://localhost:4333/player",
             dataType: 'text',

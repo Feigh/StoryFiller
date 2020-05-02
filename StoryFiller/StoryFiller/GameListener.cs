@@ -76,7 +76,7 @@ namespace StoryFiller
 		{
 			string strprompt = "";
 			if (_gameState.CurrentState == GameSessionState.PLAYERINPUT)
-				strprompt = "En lång ___.";
+				strprompt = _gameState.Prompt.OrderBy(o => o.order).Where(x => x.playerchoise == null).FirstOrDefault().prompt;
 			var playList = _gameState.PlayerList;
 			return new GameResponse() { players = playList, status = _gameState.CurrentState, prompt = strprompt };
 		}

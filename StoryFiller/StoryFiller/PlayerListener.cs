@@ -87,7 +87,9 @@ namespace StoryFiller
 				case "newplayer":
 					return _gameState.AddPlayer(body.player.name);
 				case "start":
-					return _gameState.StartGame(body.player.name);
+					return _gameState.StartGame(body.player);
+				case "suggestion":
+					return _gameState.SubmitInput(body.player);
 				default:
 					return _gameState.AddPlayer(body.player.name);
 			}			
